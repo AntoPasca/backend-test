@@ -1,5 +1,7 @@
 package it.apasca.websocket.model;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 
 import lombok.AllArgsConstructor;
@@ -17,7 +19,8 @@ public class ChatMessage {
     private MessageType type;
     private String content;
     private String sender;
-
+    private Date sentTime;
+    
     public enum MessageType {
         CHAT,
         JOIN,
