@@ -3,6 +3,8 @@
  */
 package it.apasca.websocket.service;
 
+import java.util.List;
+
 import it.apasca.websocket.model.ChatMessage;
 
 /**
@@ -16,4 +18,6 @@ public interface MessageService {
 	 * 
 	 */
 	public String save(ChatMessage chatMessage);
+	
+	public List<ChatMessage> getMessage();
 }

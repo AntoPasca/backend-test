@@ -4,6 +4,7 @@
 package it.apasca.websocket.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +24,15 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public String save(ChatMessage chatMessage) {
-		chatMessage.setSentTime(new Date());
+		chatMessage.setSendTime(new Date());
 		chatMessage = messageDao.save(chatMessage);
 		return chatMessage.getId();
+	}
+
+	@Override
+	public List<ChatMessage> getMessage() {
+		List<ChatMessage> messages = messageDao.findAll();
+		return messages;
 	}
 
 }
