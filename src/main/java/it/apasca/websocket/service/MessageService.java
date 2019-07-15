@@ -20,4 +20,6 @@ public interface MessageService {
 	public String save(ChatMessage chatMessage);
 	
 	public List<ChatMessage> getMessage();
+	
+	public void notify(ChatMessage chatMessage) throws Exception;
 }

@@ -30,8 +30,9 @@ public class ChatController {
 		
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
+    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) throws Exception{
     	messageService.save(chatMessage);
+    	messageService.notify(chatMessage);
         return chatMessage;
     }
 
