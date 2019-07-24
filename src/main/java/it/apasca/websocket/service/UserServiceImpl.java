@@ -3,6 +3,7 @@ package it.apasca.websocket.service;
 import it.apasca.websocket.dao.UserDao;
 import it.apasca.websocket.model.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,11 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public String createUser(User user) {
-        User userSaved = userDao.save(user);
-        return userSaved.getId();
+    public User createUser(User user) {
+        User userToSave = new User();
+        BeanUtils.copyProperties(user , userToSave , "id");
+        User userSaved = userDao.save(userToSave);
+        return userSaved;
     }
 
     @Override

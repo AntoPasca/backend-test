@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserService {
 
-    String createUser(User user);
+    User createUser(User user);
 
     void deleteUser(String roomId);
 
