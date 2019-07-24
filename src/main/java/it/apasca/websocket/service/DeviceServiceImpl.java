@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
-import it.apasca.websocket.controller.WebSocketEventListener;
 import it.apasca.websocket.dao.DeviceDao;
 import it.apasca.websocket.dto.DeviceRegistration;
 import it.apasca.websocket.model.Device;
