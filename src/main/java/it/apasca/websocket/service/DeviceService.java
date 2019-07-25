@@ -1,6 +1,7 @@
 package it.apasca.websocket.service;
 
 import it.apasca.websocket.dto.DeviceRegistration;
+import it.apasca.websocket.dto.UserDto;
 
 /**
  * @author a.pasca
@@ -9,5 +10,6 @@ import it.apasca.websocket.dto.DeviceRegistration;
 public interface DeviceService {
 	
 	public String registerToken(DeviceRegistration deviceRegistration) throws Exception;
+
 
 }
