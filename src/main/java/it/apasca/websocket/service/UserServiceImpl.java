@@ -3,6 +3,7 @@
  */
 package it.apasca.websocket.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -60,20 +61,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User createUser(User user) {
-		User userToSave = new User();
-		BeanUtils.copyProperties(user , userToSave , "id");
-		User userSaved = userDao.save(userToSave);
-		return userSaved;
+	public List<UserDto> getUsers(UserDto userExample) throws Exception {
+		User userModel = new User();
+		List<UserDto> users = new ArrayList<>();
+		UserDto userDto = new UserDto();
+
+		BeanUtils.copyProperties(userExample, userModel);
+		List<User> usersToReturn = userDao.findAll(Example.of(userModel));
+		usersToReturn.stream().forEach(user ->  {
+			BeanUtils.copyProperties(user , userDto);
+			users.add(userDto);
+		});
+
+		return users;
 	}
 
-	@Override
-	public void deleteUser(String userID) {
-		userDao.deleteById(userID);
-	}
-
-	@Override
-	public List<User> getUsers(User user) {
-		return userDao.findAll(Example.of(user));
-	}
 }
