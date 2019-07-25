@@ -54,8 +54,8 @@ public class UserServiceImpl implements UserService {
 			return userModel.getId();
 		}
 		else {
-			logger.error("Utente " + user.getUsername() + " già registrato");
-			throw new Exception("Errore nella registrazione dell'utente, email o username già presenti");
+			logger.error("Utente " + user.getUsername() + " gia' registrato");
+			throw new Exception("Errore nella registrazione dell'utente, email o username gia' presenti");
 		}
 	}
 
@@ -73,6 +73,28 @@ public class UserServiceImpl implements UserService {
 		});
 
 		return users;
+	}
+
+	@Override
+	public UserDto login(UserDto user) throws Exception {
+		User userModel = new User();
+		userModel.setUsername(user.getUsername());
+		Optional<User> userExample = userDao.findOne(Example.of(userModel));
+		if(userExample.isPresent()) {
+			if(bCryptPasswordEncoder.matches(user.getPassword(), userExample.get().getPassword())) {
+				UserDto userOut = new UserDto();
+				BeanUtils.copyProperties(userExample.get(), userOut);
+				return userOut;
+			}
+			else {
+				logger.error("Password " + user.getPassword() + " non corrispondente");
+				throw new Exception("Errore accesso, password errata");
+			}
+		}
+		else {
+			logger.error("Utente " + user.getUsername() + " non presente");
+			throw new Exception("Errore accesso, username non presente");
+		}
 	}
 
 }
