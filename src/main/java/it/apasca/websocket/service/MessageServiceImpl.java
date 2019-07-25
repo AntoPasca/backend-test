@@ -8,8 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -25,15 +23,15 @@ import it.apasca.websocket.dto.Data;
 import it.apasca.websocket.dto.FirebaseNotification;
 import it.apasca.websocket.model.ChatMessage;
 import it.apasca.websocket.model.Device;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author B.Conetta
  *
  */
+@Slf4j
 @Service
 public class MessageServiceImpl implements MessageService {
-	
-	private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 	
 	@Value("${firebase.server.key}")
 	private String serverKey;
@@ -66,7 +64,7 @@ public class MessageServiceImpl implements MessageService {
 	public void notify(ChatMessage chatMessage) throws Exception {
 		FirebaseNotification firebaseNotification = new FirebaseNotification();
 		Data data = new Data();
-		data.setTitle(chatMessage.getSender());
+		data.setTitle(chatMessage.getSenderId());
 		data.setMessage(chatMessage.getContent());
 		firebaseNotification.setData(data);
 		List<Device> devices = deviceDao.findAll();
@@ -86,9 +84,9 @@ public class MessageServiceImpl implements MessageService {
 			interceptors.add(new HeaderRequestInterceptor("Content-Type", "application/json"));
 			restTemplate.setInterceptors(interceptors);
 			String firebaseResponse = restTemplate.postForObject(apiUrl, request, String.class);		
-			logger.info(firebaseResponse);
+			log.info(firebaseResponse);
 	    } catch (Exception e) {
-	    	logger.error("Errore nell'invio della notifica", e);
+	    	log.error("Errore nell'invio della notifica", e);
 			throw e;
 	    } 
 		

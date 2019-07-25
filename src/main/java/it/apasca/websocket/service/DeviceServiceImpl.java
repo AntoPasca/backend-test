@@ -6,8 +6,6 @@ package it.apasca.websocket.service;
 import java.util.Date;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -15,15 +13,16 @@ import org.springframework.stereotype.Service;
 import it.apasca.websocket.dao.DeviceDao;
 import it.apasca.websocket.dto.DeviceRegistration;
 import it.apasca.websocket.model.Device;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author a.pasca
  *
  */
+@Slf4j
 @Service
 public class DeviceServiceImpl implements DeviceService{
 	
-	private static final Logger logger = LoggerFactory.getLogger(DeviceServiceImpl.class);
 
 	@Autowired
 	private DeviceDao deviceDao;
@@ -41,7 +40,7 @@ public class DeviceServiceImpl implements DeviceService{
 			return device.getId();
 		}
 		else {
-			logger.error("Dispositivo con token: " + deviceRegistration.getToken() + " già presente");
+			log.error("Dispositivo con token: " + deviceRegistration.getToken() + " già presente");
 			throw new Exception("Errore nella registrazione del token");
 		}
 	}

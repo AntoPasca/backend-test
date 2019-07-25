@@ -3,11 +3,14 @@
  */
 package it.apasca.websocket.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -52,9 +55,25 @@ public class UserServiceImpl implements UserService {
 			return userModel.getId();
 		}
 		else {
-			logger.error("Utente " + user.getUsername() + " gi√† registrato");
-			throw new Exception("Errore nella registrazione dell'utente, email o username gi√† presenti");
+			logger.error("Utente " + user.getUsername() + " gi‡ registrato");
+			throw new Exception("Errore nella registrazione dell'utente, email o username gi‡ presenti");
 		}
+	}
+
+	@Override
+	public List<UserDto> getUsers(UserDto userExample) throws Exception {
+		User userModel = new User();
+		List<UserDto> users = new ArrayList<>();
+		UserDto userDto = new UserDto();
+
+		BeanUtils.copyProperties(userExample, userModel);
+		List<User> usersToReturn = userDao.findAll(Example.of(userModel));
+		usersToReturn.stream().forEach(user ->  {
+			BeanUtils.copyProperties(user , userDto);
+			users.add(userDto);
+		});
+
+		return users;
 	}
 
 }
