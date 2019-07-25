@@ -1,7 +1,6 @@
 package it.apasca.websocket.service;
 
 import it.apasca.websocket.dto.DeviceRegistration;
-import it.apasca.websocket.dto.UserDto;
 
 /**
  * @author a.pasca

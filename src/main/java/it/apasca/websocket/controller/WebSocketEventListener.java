@@ -38,7 +38,7 @@ public class WebSocketEventListener {
 
             ChatMessage chatMessage = new ChatMessage();
             chatMessage.setType(ChatMessage.MessageType.LEAVE);
-            chatMessage.setSenderId(username);
+            // chatMessage.setSender(username); TODO: setta utente completo
 
             messagingTemplate.convertAndSend("/topic/public", chatMessage);
         }

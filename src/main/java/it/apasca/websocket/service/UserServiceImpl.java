@@ -3,11 +3,10 @@
  */
 package it.apasca.websocket.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
+import it.apasca.websocket.dao.UserDao;
+import it.apasca.websocket.dto.UserDto;
+import it.apasca.websocket.model.User;
+import it.apasca.websocket.model.User.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -16,10 +15,10 @@ import org.springframework.data.domain.Example;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import it.apasca.websocket.dao.UserDao;
-import it.apasca.websocket.dto.UserDto;
-import it.apasca.websocket.model.User;
-import it.apasca.websocket.model.User.Role;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author a.pasca

@@ -3,17 +3,16 @@
  */
 package it.apasca.websocket.service;
 
-import java.util.Date;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.stereotype.Service;
-
 import it.apasca.websocket.dao.DeviceDao;
 import it.apasca.websocket.dto.DeviceRegistration;
 import it.apasca.websocket.model.Device;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.Optional;
 
 /**
  * @author a.pasca

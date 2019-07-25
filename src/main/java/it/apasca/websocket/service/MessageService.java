@@ -3,9 +3,9 @@
  */
 package it.apasca.websocket.service;
 
-import java.util.List;
-
 import it.apasca.websocket.model.ChatMessage;
+
+import java.util.List;
 
 /**
  * @author B.Conetta

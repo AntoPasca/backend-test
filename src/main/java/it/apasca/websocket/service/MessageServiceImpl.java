@@ -3,20 +3,7 @@
  */
 package it.apasca.websocket.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import it.apasca.websocket.dao.DeviceDao;
 import it.apasca.websocket.dao.MessageDao;
 import it.apasca.websocket.dto.Data;
@@ -24,6 +11,17 @@ import it.apasca.websocket.dto.FirebaseNotification;
 import it.apasca.websocket.model.ChatMessage;
 import it.apasca.websocket.model.Device;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author B.Conetta
@@ -64,7 +62,7 @@ public class MessageServiceImpl implements MessageService {
 	public void notify(ChatMessage chatMessage) throws Exception {
 		FirebaseNotification firebaseNotification = new FirebaseNotification();
 		Data data = new Data();
-		data.setTitle(chatMessage.getSenderId());
+		data.setTitle(chatMessage.getSender().getUsername());
 		data.setMessage(chatMessage.getContent());
 		firebaseNotification.setData(data);
 		List<Device> devices = deviceDao.findAll();

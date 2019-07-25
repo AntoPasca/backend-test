@@ -1,14 +1,13 @@
 package it.apasca.websocket.model;
 
-import java.util.Date;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Date;
 
 @Getter
 @Setter
@@ -20,8 +19,8 @@ public class ChatMessage {
 	private String id;
     private MessageType type;
     private String content;
-    private String senderId;
-    private String conversationId;
+    private User sender;
+    private Conversation conversation;
     private Date sendTime;
     
     public enum MessageType {
