@@ -48,13 +48,7 @@ public class ChatRestController {
 	public String registerToken(@RequestBody DeviceRegistration deviceRegistration) throws Exception{
 		return deviceService.registerToken(deviceRegistration);
 	}
-	
-	@ApiOperation("Registra utente")
-	@PostMapping("/registrautente")
-	public String registraUtente(@RequestBody UserDto user) throws Exception{
-		return userService.registraUtente(user);
-	}
-	
+
 	@ApiOperation("Login")
 	@PostMapping("/login")
 	public String login(@RequestBody UserDto user) throws Exception{

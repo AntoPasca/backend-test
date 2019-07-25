@@ -3,7 +3,6 @@ package it.apasca.websocket.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import it.apasca.websocket.dto.UserDto;
-import it.apasca.websocket.model.User;
 import it.apasca.websocket.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +19,13 @@ public class UserController {
     @Autowired
     private ObjectMapper objectMapper;
 
-    /*
-    @ApiOperation("Crea un utente")
+    @ApiOperation("Registra utente")
     @PostMapping("/")
-    public User createUser(@RequestBody User user) throws Exception {
-        return userService.createUser(user);
+    public String registraUtente(@RequestBody UserDto user) throws Exception{
+        return userService.registraUtente(user);
     }
-    */
 
-    @ApiOperation("recupera informazioni utenti")
+    @ApiOperation("Recupera informazioni utenti")
     @GetMapping("/")
     public List<UserDto> getUsers(@RequestParam() String params) throws Exception {
         UserDto user = objectMapper.readValue(params, UserDto.class);
