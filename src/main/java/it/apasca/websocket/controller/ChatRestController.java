@@ -33,7 +33,8 @@ public class ChatRestController {
 	@Autowired
 	DeviceService deviceService;
 
-	@ApiOperation("Restituisce tutti i messaggi")
+
+	@ApiOperation("Restituisce tutti i messaggi di una stanza")
 	@GetMapping
 	public List<ChatMessage> loadMessage() throws Exception{
 		return messageService.getMessage();

@@ -1,6 +1,7 @@
 package it.apasca.websocket.service;
 
 
+import it.apasca.websocket.model.ChatMessage;
 import it.apasca.websocket.model.Conversation;
 
 import java.util.List;
@@ -10,4 +11,6 @@ public interface RoomService {
     public void deleteRoom(String roomId);
     public Conversation getRoom(String roomId) throws Exception;
     public List<Conversation> getRooms(Conversation conversation) throws Exception;
+
+    public List<ChatMessage> getMessages(String roomId , ChatMessage chatMessage) throws Exception;
 }

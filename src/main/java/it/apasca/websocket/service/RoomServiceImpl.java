@@ -1,6 +1,8 @@
 package it.apasca.websocket.service;
 
 import it.apasca.websocket.dao.ConversationDao;
+import it.apasca.websocket.dao.MessageDao;
+import it.apasca.websocket.model.ChatMessage;
 import it.apasca.websocket.model.Conversation;
 import javassist.NotFoundException;
 import org.springframework.beans.BeanUtils;
@@ -16,6 +18,9 @@ public class RoomServiceImpl implements RoomService {
 
     @Autowired
     private ConversationDao conversationDao;
+
+    @Autowired
+    private MessageDao messageDao;
 
 
     @Override
@@ -44,5 +49,19 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public List<Conversation> getRooms(Conversation conversation) throws Exception {
         return conversationDao.findAll(Example.of(conversation));
+    }
+
+    @Override
+    public List<ChatMessage> getMessages(String roomId ,ChatMessage chatMessage) throws Exception{
+        // i messaggi richiesti appartengono alla room
+        Optional<Conversation> roomOpt = conversationDao.findById(roomId);
+        ChatMessage messageToReturn = new ChatMessage();
+        if (!roomOpt.isPresent()) {
+            throw new NotFoundException("stanza non trovata!");
+        }
+        BeanUtils.copyProperties(chatMessage, messageToReturn , "conversationId");
+        messageToReturn.setConversationId(roomId);
+
+        return messageDao.findAll(Example.of(messageToReturn));
     }
 }
