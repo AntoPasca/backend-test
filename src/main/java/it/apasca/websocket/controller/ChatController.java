@@ -7,6 +7,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -14,6 +15,9 @@ public class ChatController {
 	
 	@Autowired
 	private MessageService messageService;
+	
+	@Autowired
+    private SimpMessageSendingOperations messagingTemplate;
 
 	/*
 	 * Tutti i messaggi mandati dai client al path /app verranno reindirizzati ai metodi handling annotati 
@@ -26,19 +30,20 @@ public class ChatController {
 	 * */
 		
     @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/public")
+//    @SendTo("/topic/public")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) throws Exception{
     	messageService.save(chatMessage);
     	messageService.notify(chatMessage);
+    	messagingTemplate.convertAndSend(chatMessage.getConversation().getTitle(), chatMessage);
         return chatMessage;
     }
 
     @MessageMapping("/chat.addUser")
-    @SendTo("/topic/public")
-    public ChatMessage addUser(@Payload ChatMessage chatMessage, 
-                               SimpMessageHeaderAccessor headerAccessor) {
+//    @SendTo("/topic/public")
+    public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
         // Add username in web socket session
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender().getUsername());
+        messagingTemplate.convertAndSend(chatMessage.getConversation().getTitle(), chatMessage);
         return chatMessage;
     }
 
