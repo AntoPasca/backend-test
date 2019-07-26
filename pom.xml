@@ -18,6 +18,8 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<swagger2.version>2.8.0</swagger2.version>
+		<jcr.api.version>2.0</jcr.api.version>
+		<jackrabbit.version>2.18.0</jackrabbit.version>
 	</properties>
 
 	<dependencies>
@@ -58,6 +60,18 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-crypto</artifactId>
+		</dependency>
+		<!-- The JCR API -->
+		<dependency>
+			<groupId>javax.jcr</groupId>
+			<artifactId>jcr</artifactId>
+			<version>${jcr.api.version}</version>
+		</dependency>
+		<!-- Jackrabbit content repository -->
+		<dependency>
+			<groupId>org.apache.jackrabbit</groupId>
+			<artifactId>jackrabbit-core</artifactId>
+			<version>${jackrabbit.version}</version>
 		</dependency>
 	</dependencies>
 
