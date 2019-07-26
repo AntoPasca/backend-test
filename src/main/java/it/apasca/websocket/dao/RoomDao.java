@@ -3,7 +3,7 @@
  */
 package it.apasca.websocket.dao;
 
-import it.apasca.websocket.model.Conversation;
+import it.apasca.websocket.model.Room;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-public interface ConversationDao extends MongoRepository<Conversation, String> {
+public interface RoomDao extends MongoRepository<Room, String> {
 
 }

@@ -51,12 +51,6 @@ public class MessageServiceImpl implements MessageService {
 		chatMessage = messageDao.save(chatMessage);
 		return chatMessage.getId();
 	}
-	
-	@Override
-	public List<ChatMessage> getMessage() {
-		List<ChatMessage> messages = messageDao.findAll();
-		return messages;
-	}
 
 	@Override
 	public void notify(ChatMessage chatMessage) throws Exception {

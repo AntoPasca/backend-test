@@ -20,7 +20,7 @@ public class ChatMessage {
     private MessageType type;
     private String content;
     private User sender;
-    private Conversation conversation;
+    private Room room;
     private Date sendTime;
     
     public enum MessageType {

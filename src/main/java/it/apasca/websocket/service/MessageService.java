@@ -5,8 +5,6 @@ package it.apasca.websocket.service;
 
 import it.apasca.websocket.model.ChatMessage;
 
-import java.util.List;
-
 /**
  * @author B.Conetta
  *	classe usata per gestire i messaggi della chat
@@ -18,8 +16,6 @@ public interface MessageService {
 	 * 
 	 */
 	public String save(ChatMessage chatMessage);
-	
-	public List<ChatMessage> getMessage();
 	
 	public void notify(ChatMessage chatMessage) throws Exception;
 }

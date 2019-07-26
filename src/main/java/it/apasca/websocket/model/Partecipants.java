@@ -15,7 +15,7 @@ import java.util.List;
 public class Partecipants {
     @Id
     private String id;
-    private Conversation conversation;
+    private Room room;
     private List<User> users;
 
 }

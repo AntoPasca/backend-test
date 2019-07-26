@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ConversationDto {
+public class RoomDto {
 	private String id;
     private String title;
     private User creator;

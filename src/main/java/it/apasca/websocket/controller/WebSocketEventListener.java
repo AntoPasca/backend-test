@@ -1,7 +1,8 @@
 package it.apasca.websocket.controller;
 
-import it.apasca.websocket.dto.UserDto;
+import it.apasca.websocket.model.ChatMessage;
 import it.apasca.websocket.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -9,9 +10,6 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
-
-import it.apasca.websocket.model.ChatMessage;
-import lombok.extern.slf4j.Slf4j;
 
 
 /*

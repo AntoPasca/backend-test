@@ -31,13 +31,7 @@ public class ChatRestController {
 	
 	@Autowired
 	UserService userService;
-	
-	@ApiOperation("Restituisce tutti i messaggi")
-	@GetMapping
-	public List<ChatMessage> loadMessage() throws Exception{
-		return messageService.getMessage();
-	}
-	
+
 	@ApiOperation("Registra il token del device")
 	@PostMapping("/register")
 	public String registerToken(@RequestBody DeviceRegistration deviceRegistration) throws Exception{
