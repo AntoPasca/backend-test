@@ -32,8 +32,9 @@ public class ChatController {
 //    @SendTo("/topic/public")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) throws Exception{
     	messageService.save(chatMessage);
-    	messageService.notify(chatMessage);
-    	messagingTemplate.convertAndSend(chatMessage.getRoom().getTitle(), chatMessage);
+    	// messageService.notify(chatMessage);
+    	String urlSendTo = "/topic/".concat(chatMessage.getRoom().getTitle());
+    	messagingTemplate.convertAndSend(urlSendTo, chatMessage);
         return chatMessage;
     }
 
@@ -42,7 +43,8 @@ public class ChatController {
     public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
         // Add username in web socket session
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender().getUsername());
-        messagingTemplate.convertAndSend(chatMessage.getRoom().getTitle(), chatMessage);
+		String urlSendTo = "/topic/".concat(chatMessage.getRoom().getTitle());
+        messagingTemplate.convertAndSend(urlSendTo, chatMessage);
         return chatMessage;
     }
 
