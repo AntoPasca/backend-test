@@ -1,5 +1,7 @@
 package it.apasca.websocket.controller;
 
+import it.apasca.websocket.dto.UserDto;
+import it.apasca.websocket.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -38,7 +40,9 @@ public class WebSocketEventListener {
 
             ChatMessage chatMessage = new ChatMessage();
             chatMessage.setType(ChatMessage.MessageType.LEAVE);
-            // chatMessage.setSender(username); TODO: setta utente completo
+            User user = new User();
+            user.setUsername("tst");
+            chatMessage.setSender(user); // TODO: setta utente completo - dto
 
             messagingTemplate.convertAndSend("/topic/public", chatMessage);
         }
