@@ -43,6 +43,7 @@ public class ChatController {
     public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
         // Add username in web socket session
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender().getUsername());
+        headerAccessor.getSessionAttributes().put("room", chatMessage.getRoom().getTitle());
 		String urlSendTo = "/topic/".concat(chatMessage.getRoom().getTitle());
         messagingTemplate.convertAndSend(urlSendTo, chatMessage);
         return chatMessage;

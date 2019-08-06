@@ -33,16 +33,17 @@ public class WebSocketEventListener {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 
         String username = (String) headerAccessor.getSessionAttributes().get("username");
+        String room = (String) headerAccessor.getSessionAttributes().get("room");
         if(username != null) {
             log.info("User Disconnected : " + username);
 
             ChatMessage chatMessage = new ChatMessage();
             chatMessage.setType(ChatMessage.MessageType.LEAVE);
             User user = new User();
-            user.setUsername(username);
+            user.setUsername(username.concat(" disconnected and "));
             chatMessage.setSender(user); // TODO: setta utente completo - dto
 
-            messagingTemplate.convertAndSend("/topic/public", chatMessage);
+            messagingTemplate.convertAndSend("/topic/".concat(room), chatMessage);
         }
     }
 }
