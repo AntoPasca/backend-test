@@ -48,7 +48,9 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public String save(ChatMessage chatMessage) {
 		chatMessage.setSendTime(new Date());
-		chatMessage = messageDao.save(chatMessage);
+		if(chatMessage.getType() != ChatMessage.MessageType.LEAVE) {
+			chatMessage = messageDao.save(chatMessage);
+		}
 		return chatMessage.getId();
 	}
 
