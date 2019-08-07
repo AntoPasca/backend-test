@@ -43,4 +43,10 @@ public class ChatRestController {
 	public String login(@RequestBody UserDto user) throws Exception{
 		return userService.registraUtente(user);
 	}
+	
+	@ApiOperation("recupera  messaggi di una stanza")
+    @DeleteMapping("/{messageId}")
+    public String deleteMessage(@PathVariable() String messageId) throws Exception {
+        return messageService.deleteMessage(messageId);
+    }
 }

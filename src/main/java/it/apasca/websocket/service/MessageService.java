@@ -16,6 +16,6 @@ public interface MessageService {
 	 * 
 	 */
 	public String save(ChatMessage chatMessage);
-	
 	public void notify(ChatMessage chatMessage) throws Exception;
+	public String deleteMessage(String messageId) throws Exception;
 }

@@ -3,6 +3,7 @@
  */
 package it.apasca.websocket.dto;
 
+import it.apasca.websocket.model.User.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,4 +24,5 @@ public class UserDto {
 	private String email;
 	private String username;
 	private String password;
+	private Role role;
 }
