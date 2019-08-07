@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 		}
 		else {
 			logger.error("Utente " + user.getUsername() + " gia' registrato");
-			throw new Exception("Errore nella registrazione dell'utente, email o username gia' presenti");
+			throw new Exception("ERRREG");
 		}
 	}
 
@@ -88,12 +88,12 @@ public class UserServiceImpl implements UserService {
 			}
 			else {
 				logger.error("Password " + user.getPassword() + " non corrispondente");
-				throw new Exception("Errore accesso, password errata");
+				throw new Exception("ERRPSW");
 			}
 		}
 		else {
 			logger.error("Utente " + user.getUsername() + " non presente");
-			throw new Exception("Errore accesso, username non presente");
+			throw new Exception("ERRUSR");
 		}
 	}
 

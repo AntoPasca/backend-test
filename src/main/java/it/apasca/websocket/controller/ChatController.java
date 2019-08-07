@@ -32,7 +32,7 @@ public class ChatController {
 //    @SendTo("/topic/public")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) throws Exception{
     	messageService.save(chatMessage);
-    	// messageService.notify(chatMessage);
+    	messageService.notify(chatMessage);
     	String urlSendTo = "/topic/".concat(chatMessage.getRoom().getTitle());
     	messagingTemplate.convertAndSend(urlSendTo, chatMessage);
         return chatMessage;

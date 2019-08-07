@@ -21,7 +21,7 @@ public class UserController {
     private ObjectMapper objectMapper;
 
     @ApiOperation("Registra utente")
-    @PostMapping(produces = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping
     public String registraUtente(@RequestBody UserDto user) throws Exception{
     	return userService.registraUtente(user);
     }
