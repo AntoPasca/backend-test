@@ -22,12 +22,12 @@ public class WebSocketEventListener {
 
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
-
+    // login
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
         log.info("Received a new web socket connection");
     }
-
+    // logout
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
@@ -41,7 +41,7 @@ public class WebSocketEventListener {
             chatMessage.setType(ChatMessage.MessageType.LEAVE);
             User user = new User();
             user.setUsername(username.concat(" disconnected and "));
-            chatMessage.setSender(user); // TODO: setta utente completo - dto
+            chatMessage.setSender(user);
 
             messagingTemplate.convertAndSend("/topic/".concat(room), chatMessage);
         }
