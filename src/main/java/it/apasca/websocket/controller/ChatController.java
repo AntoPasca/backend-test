@@ -38,7 +38,7 @@ public class ChatController {
         return chatMessage;
     }
 
-    @MessageMapping("/chat.addUser")
+    @MessageMapping("/chat.room")
 //    @SendTo("/topic/public")
     public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
         // Add username in web socket session

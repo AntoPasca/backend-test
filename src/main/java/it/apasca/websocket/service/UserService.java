@@ -18,5 +18,7 @@ public interface UserService {
 	List<UserDto> getUsers(UserDto userExample) throws Exception;
 
 	public UserDto login(UserDto user) throws Exception ;
+	
+	public void changeStatus(String userId);
 
 }

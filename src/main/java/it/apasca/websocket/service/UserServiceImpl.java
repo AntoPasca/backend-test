@@ -3,32 +3,30 @@
  */
 package it.apasca.websocket.service;
 
-import it.apasca.websocket.dao.UserDao;
-import it.apasca.websocket.dto.UserDto;
-import it.apasca.websocket.model.User;
-import it.apasca.websocket.model.User.Role;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import it.apasca.websocket.dao.UserDao;
+import it.apasca.websocket.dto.UserDto;
+import it.apasca.websocket.model.User;
+import it.apasca.websocket.model.User.Role;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author a.pasca
  *
  */
-
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
-	
-	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	
 	@Autowired
 	private UserDao userDao;
@@ -54,7 +52,7 @@ public class UserServiceImpl implements UserService {
 			return userModel.getId();
 		}
 		else {
-			logger.error("Utente " + user.getUsername() + " gia' registrato");
+			log.error("Utente " + user.getUsername() + " gia' registrato");
 			throw new Exception("ERRREG");
 		}
 	}
@@ -87,14 +85,20 @@ public class UserServiceImpl implements UserService {
 				return userOut;
 			}
 			else {
-				logger.error("Password " + user.getPassword() + " non corrispondente");
+				log.error("Password " + user.getPassword() + " non corrispondente");
 				throw new Exception("ERRPSW");
 			}
 		}
 		else {
-			logger.error("Utente " + user.getUsername() + " non presente");
+			log.error("Utente " + user.getUsername() + " non presente");
 			throw new Exception("ERRUSR");
 		}
+	}
+
+	@Override
+	public void changeStatus(String userId) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
