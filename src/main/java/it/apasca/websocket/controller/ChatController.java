@@ -1,22 +1,21 @@
 package it.apasca.websocket.controller;
 
-import it.apasca.websocket.model.ChatMessage;
-import it.apasca.websocket.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
+
+import it.apasca.websocket.service.ChatService;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Controller
 public class ChatController {
 	
 	@Autowired
-	private MessageService messageService;
+	private ChatService chatService;
 	
-	@Autowired
-    private SimpMessageSendingOperations messagingTemplate;
 
 	/*
 	 * Tutti i messaggi mandati dai client al path /app verranno reindirizzati ai metodi handling annotati 
@@ -28,25 +27,29 @@ public class ChatController {
 	 * will be routed to the addUser() method.
 	 * */
 		
-    @MessageMapping("/chat.sendMessage")
-//    @SendTo("/topic/public")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) throws Exception{
-    	messageService.save(chatMessage);
-    	messageService.notify(chatMessage);
-    	String urlSendTo = "/topic/".concat(chatMessage.getRoom().getTitle());
-    	messagingTemplate.convertAndSend(urlSendTo, chatMessage);
-        return chatMessage;
+    @MessageMapping("/chat.send")
+    public void send(@Payload IncomingMessage incomingMessage) throws Exception {
+    	chatService.send(incomingMessage);
     }
-
-    @MessageMapping("/chat.room")
-//    @SendTo("/topic/public")
-    public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
-        // Add username in web socket session
-        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender().getUsername());
-        headerAccessor.getSessionAttributes().put("room", chatMessage.getRoom().getTitle());
-		String urlSendTo = "/topic/".concat(chatMessage.getRoom().getTitle());
-        messagingTemplate.convertAndSend(urlSendTo, chatMessage);
-        return chatMessage;
+    
+    @MessageMapping("/chat.join")
+    
+    public void join(@Payload IncomingMessage incomingMessage) throws Exception {
+    	chatService.join(incomingMessage.getUserID(), incomingMessage.getRoomID());
     }
-
+    
+    @MessageMapping("/chat.leave")
+    public void leave(@Payload IncomingMessage incomingMessage) throws Exception {
+    	chatService.leave(incomingMessage.getUserID(), incomingMessage.getRoomID());
+    }
+    
+    // messaggi provenienti da utente 
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class IncomingMessage {
+    	private String userID;
+    	private String roomID;
+    	private String content;
+    }
 }

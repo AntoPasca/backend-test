@@ -12,12 +12,10 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatMessageDto {
-	private String id;
+public class OutgoingMessage {
 	private MessageType type;
     private String content;
-    private UserDto sender;
-    private RoomDto room;
+    private String senderUsername;
+    private String roomTitle;
     private Date sendTime;
-
 }

@@ -19,8 +19,8 @@ public class ChatMessage {
 	private String id;
     private MessageType type;
     private String content;
-    private User sender;
-    private Room room;
+    private String senderID;
+    private String roomID;
     private Date sendTime;
     
     public enum MessageType {

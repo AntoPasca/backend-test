@@ -1,13 +1,12 @@
 package it.apasca.websocket.service;
 
-import it.apasca.websocket.dto.UserDto;
-import it.apasca.websocket.model.ChatMessage;
-import it.apasca.websocket.model.Room;
+import it.apasca.websocket.controller.ChatController.IncomingMessage;
 
+// trasforma  incoming messages in outgoing messages
 public interface ChatService {
 
-    public void join(UserDto user , Room room);
-    public void leave(UserDto user , Room room);
-    public void send(ChatMessage chatMessage);
+    public void join(String userID , String roomTitle) throws Exception;
+    public void leave(String userID , String roomTitle) throws Exception;
+    public void send(IncomingMessage incomingMessage) throws Exception;
 
 }

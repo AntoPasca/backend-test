@@ -18,7 +18,7 @@ public class Room {
     @Id
     private String id;
     private String title;
-    private User creator;
+    private String creatorID;
     private Date createdAt;
     private Date updatedAt;
 

@@ -3,15 +3,12 @@
  */
 package it.apasca.websocket.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import it.apasca.websocket.dao.DeviceDao;
-import it.apasca.websocket.dao.MessageDao;
-import it.apasca.websocket.dto.Data;
-import it.apasca.websocket.dto.FirebaseNotification;
-import it.apasca.websocket.model.ChatMessage;
-import it.apasca.websocket.model.Device;
-import javassist.NotFoundException;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -19,11 +16,18 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import it.apasca.websocket.dao.DeviceDao;
+import it.apasca.websocket.dao.MessageDao;
+import it.apasca.websocket.dao.UserDao;
+import it.apasca.websocket.dto.Data;
+import it.apasca.websocket.dto.FirebaseNotification;
+import it.apasca.websocket.model.ChatMessage;
+import it.apasca.websocket.model.Device;
+import it.apasca.websocket.model.User;
+import javassist.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author B.Conetta
@@ -43,6 +47,8 @@ public class MessageServiceImpl implements MessageService {
 	
 	@Autowired
 	private DeviceDao deviceDao;
+	@Autowired
+	private UserDao userDao;
 	
 	@Autowired
 	ObjectMapper objectmapper;
@@ -61,7 +67,12 @@ public class MessageServiceImpl implements MessageService {
 		if(chatMessage.getType() == ChatMessage.MessageType.CHAT) {
 			FirebaseNotification firebaseNotification = new FirebaseNotification();
 			Data data = new Data();
-			data.setTitle(chatMessage.getSender().getUsername());
+			Optional<User> senderOpt = userDao.findById(chatMessage.getSenderID());
+			if (!senderOpt.isPresent()) {
+				log.error("utente non trovato mentre notifico messaggio");
+				throw new NotFoundException("utente non trovato costruendo notifica messaggio");
+			}
+			data.setTitle(senderOpt.get().getUsername());
 			data.setMessage(chatMessage.getContent());
 			firebaseNotification.setData(data);
 			List<Device> devices = deviceDao.findAll();
@@ -69,7 +80,6 @@ public class MessageServiceImpl implements MessageService {
 			firebaseNotification.setRegistration_ids(tokens);
 			firebaseNotification.setPriority("high");
 			String fbNotification = objectmapper.writeValueAsString(firebaseNotification);
-			
 			
 			//Chiamata servizio firebase
 			try {

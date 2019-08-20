@@ -60,7 +60,7 @@ public class RoomServiceImpl implements RoomService {
             throw new NotFoundException("stanza non trovata!");
         }
         BeanUtils.copyProperties(chatMessage, messageToReturn , "roomId");
-        messageToReturn.setRoom(roomOpt.get());
+        messageToReturn.setRoomID(roomOpt.get().getId());
 
         return messageDao.findAll(Example.of(messageToReturn));
     }
