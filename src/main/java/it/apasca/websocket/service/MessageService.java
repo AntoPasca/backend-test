@@ -3,6 +3,9 @@
  */
 package it.apasca.websocket.service;
 
+import java.util.List;
+
+import it.apasca.websocket.dto.OutgoingMessage;
 import it.apasca.websocket.model.ChatMessage;
 
 /**
@@ -18,4 +21,5 @@ public interface MessageService {
 	public String save(ChatMessage chatMessage);
 	public void notify(ChatMessage chatMessage) throws Exception;
 	public String deleteMessage(String messageId) throws Exception;
+	public List<OutgoingMessage> load(String userID, String roomID) throws Exception;
 }

@@ -4,13 +4,16 @@
 package it.apasca.websocket.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.stereotype.Service;
@@ -20,11 +23,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.apasca.websocket.dao.DeviceDao;
 import it.apasca.websocket.dao.MessageDao;
+import it.apasca.websocket.dao.RoomDao;
 import it.apasca.websocket.dao.UserDao;
 import it.apasca.websocket.dto.Data;
 import it.apasca.websocket.dto.FirebaseNotification;
+import it.apasca.websocket.dto.OutgoingMessage;
 import it.apasca.websocket.model.ChatMessage;
 import it.apasca.websocket.model.Device;
+import it.apasca.websocket.model.Room;
 import it.apasca.websocket.model.User;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +55,8 @@ public class MessageServiceImpl implements MessageService {
 	private DeviceDao deviceDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private RoomDao roomDao;
 	
 	@Autowired
 	ObjectMapper objectmapper;
@@ -109,4 +117,26 @@ public class MessageServiceImpl implements MessageService {
 		return messageId;
 	}
 	
+	public List<OutgoingMessage> load(String userID, String roomID) throws Exception {
+		// recupera tutti i messaggi precedenti di una stanza e mandali
+		Optional<Room> roomOpt = roomDao.findById(roomID);
+		Optional<User> userOpt = userDao.findById(userID);
+		
+		if (!userOpt.isPresent() || !roomOpt.isPresent()) {
+			log.error("impossibile trovare stanza o utente ".concat(roomID).concat(" ".concat(userID)));
+			throw new Exception("impossibile trovare stanza o utente ".concat(roomID).concat(" ".concat(userID)));
+		}
+		ChatMessage chatMessage = new ChatMessage();
+		chatMessage.setRoomID(roomID);
+		List<ChatMessage> messages = messageDao.findAll(Example.of(chatMessage));
+		
+		return messages.stream()
+		.map(message -> {
+			OutgoingMessage outgoingMessage = new OutgoingMessage();
+			BeanUtils.copyProperties(message, outgoingMessage);
+			outgoingMessage.setSenderUsername(userDao.findById(message.getSenderID()).get().getUsername());
+			outgoingMessage.setRoomTitle(roomOpt.get().getTitle());
+			return outgoingMessage;
+		}).collect(Collectors.toList());
+	}
 }

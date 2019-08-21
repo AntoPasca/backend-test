@@ -33,7 +33,6 @@ public class ChatController {
     }
     
     @MessageMapping("/chat.join")
-    
     public void join(@Payload IncomingMessage incomingMessage) throws Exception {
     	chatService.join(incomingMessage.getUserID(), incomingMessage.getRoomID());
     }

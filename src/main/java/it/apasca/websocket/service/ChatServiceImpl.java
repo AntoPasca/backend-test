@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -177,5 +178,4 @@ public class ChatServiceImpl implements ChatService {
 			} 
 		}
 	}
-	
 }
