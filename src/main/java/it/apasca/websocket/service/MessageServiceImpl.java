@@ -4,7 +4,6 @@
 package it.apasca.websocket.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
