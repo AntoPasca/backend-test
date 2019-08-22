@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import it.apasca.websocket.dao.UserDao;
 import it.apasca.websocket.dto.UserDto;
 import it.apasca.websocket.model.User;
 import it.apasca.websocket.model.User.Role;
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -33,6 +35,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Autowired
+    private SimpMessageSendingOperations messagingTemplate;
 	
 	@Override
 	public String registraUtente(UserDto user) throws Exception {
@@ -61,11 +66,11 @@ public class UserServiceImpl implements UserService {
 	public List<UserDto> getUsers(UserDto userExample) throws Exception {
 		User userModel = new User();
 		List<UserDto> users = new ArrayList<>();
-		UserDto userDto = new UserDto();
 
 		BeanUtils.copyProperties(userExample, userModel);
 		List<User> usersToReturn = userDao.findAll(Example.of(userModel));
 		usersToReturn.stream().forEach(user ->  {
+			UserDto userDto = new UserDto();
 			BeanUtils.copyProperties(user , userDto);
 			users.add(userDto);
 		});
@@ -79,6 +84,11 @@ public class UserServiceImpl implements UserService {
 		userModel.setUsername(user.getUsername());
 		Optional<User> userExample = userDao.findOne(Example.of(userModel));
 		if(userExample.isPresent()) {
+			// se utente è già loggato. non permettere di entrare
+			if (userExample.get().getIsOnline()) {
+				log.error("Utente ".concat(user.getUsername()).concat(" gia' loggato"));
+				throw new Exception("ERRLOGIN");
+			}
 			if(bCryptPasswordEncoder.matches(user.getPassword(), userExample.get().getPassword())) {
 				UserDto userOut = new UserDto();
 				BeanUtils.copyProperties(userExample.get(), userOut);
@@ -96,9 +106,38 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void changeStatus(String userId) {
-		// TODO Auto-generated method stub
+	public void setOnline(String userID) throws Exception {
+		Optional<User> userOpt = userDao.findById(userID);
 		
+		if(!userOpt.isPresent()) {
+			log.error("utente id non trovato! ".concat(userID));
+    		throw new NotFoundException("utente id non trovato! ".concat(userID));
+		}
+		User user = userOpt.get();
+		user.setIsOnline(true);
+		user.setLastAccess(null);
+		userDao.save(user);
+		// TODO: in realtà serve invitare molto meno 
+		messagingTemplate.convertAndSend("/topic/online", user);
 	}
+
+	@Override
+	public void setOffline(String userID) throws Exception {
+		Optional<User> userOpt = userDao.findById(userID);
+		
+		if(!userOpt.isPresent()) {
+			log.error("utente id non trovato! ".concat(userID));
+    		throw new NotFoundException("utente id non trovato! ".concat(userID));
+		}
+		User user = userOpt.get();
+		
+		user.setIsOnline(false);
+		user.setLastAccess(new Date());
+		
+		userDao.save(user);
+		// TODO: in realtà serve invitare molto meno 
+		messagingTemplate.convertAndSend("/topic/online", user);
+	}
+
 
 }

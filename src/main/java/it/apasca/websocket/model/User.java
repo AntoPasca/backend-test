@@ -28,6 +28,7 @@ public class User {
 	private String username;
 	private String password;
 	private Boolean isOnline;
+	private Date lastAccess;
 	private Date registerDate;
 	private Role role;
 	

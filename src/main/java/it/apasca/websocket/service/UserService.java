@@ -19,6 +19,7 @@ public interface UserService {
 
 	public UserDto login(UserDto user) throws Exception ;
 	
-	public void changeStatus(String userId);
+	public void setOnline(String userID) throws Exception;
+	public void setOffline(String userID) throws Exception;
 
 }

@@ -1,11 +1,14 @@
 package it.apasca.websocket.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import it.apasca.websocket.service.UserService;
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -16,25 +19,34 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class WebSocketEventListener {
+	
+	@Autowired
+	private UserService userService;
     
     // login
     @EventListener
-    public void handleWebSocketConnectListener(SessionConnectEvent event) {
+    public void handleWebSocketConnectListener(SessionConnectEvent event) throws Exception {
     	StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-    	String username = headerAccessor.getNativeHeader("userId").get(0);
-    	if (username == null || username.isEmpty()) {
-    		log.error("utente non bene identificato");
+    	String userID = headerAccessor.getNativeHeader("userId").get(0);
+    	if (userID == null || userID.isEmpty()) {
+    		log.error("utente id non trovato! ");
+    		throw new NotFoundException("utente id non trovato! ");
     	}
-        log.info("Received a new web socket connection: " + username);
+    	headerAccessor.getSessionAttributes().put("userId", userID);
+        log.debug("User Connected : " + userID);
+        userService.setOnline(userID);
     }
     // logout
     @EventListener
-    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) throws Exception {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 
-        String username = (String) headerAccessor.getSessionAttributes().get("username");
-        if(username != null) {
-            log.info("User Disconnected : " + username);
+        String userID = (String) headerAccessor.getSessionAttributes().get("userId");
+        if(userID == null) {
+        	log.error("utente id non trovato! ");
+        	throw new NotFoundException("utente id non trovato! ");
         }
+        log.debug("User Disconnected : " + userID);
+        userService.setOffline(userID);
     }
 }

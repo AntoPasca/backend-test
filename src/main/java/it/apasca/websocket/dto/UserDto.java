@@ -3,6 +3,8 @@
  */
 package it.apasca.websocket.dto;
 
+import java.util.Date;
+
 import it.apasca.websocket.model.User.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,5 +27,7 @@ public class UserDto {
 	private String email;
 	private String username;
 	private String password;
+	private Date lastAccess;
+	private Boolean isOnline;
 	private Role role;
 }
