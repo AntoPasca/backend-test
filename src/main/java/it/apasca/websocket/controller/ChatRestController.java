@@ -50,12 +50,6 @@ public class ChatRestController {
 		return userService.registraUtente(user);
 	}
 	
-	@ApiOperation("recupera  messaggi di una stanza")
-    @DeleteMapping("/{messageId}")
-    public String deleteMessage(@PathVariable() String messageId) throws Exception {
-        return messageService.deleteMessage(messageId);
-    }
-	
     // TODO: implementare paginazione qui
     @ApiOperation("recupera  messaggi di una stanza")
     @GetMapping("/messaggio")
