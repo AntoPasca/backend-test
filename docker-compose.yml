@@ -1,18 +1,18 @@
 version: "3.3"
 services:
 
-  mongo:
-    image: arm64v8/mongo
-    restart: always
-    ports:
-      - 27017:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-
+#  mongo:
+#    image: arm64v8/mongo
+#    restart: always
+#    ports:
+#      - 27017:27017
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: example
+#
   app:
     build: .
     ports:
       - 8080:8080
-    depends_on:
-      - mongo
+#    depends_on:
+#      - mongo
