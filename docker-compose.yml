@@ -2,7 +2,7 @@ version: "3.3"
 services:
 
   mongo:
-    image: arm64v8/mongo
+    image: arm32v8/mongo
     restart: always
     ports:
       - 27017:27017
