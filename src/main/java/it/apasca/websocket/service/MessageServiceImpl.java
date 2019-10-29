@@ -107,7 +107,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	@Override
-	public String deleteMessage(String messageId) throws Exception {
+	public String delete(String messageId) throws Exception {
 		Optional<ChatMessage> messageOpt = messageDao.findById(messageId);
 		if(!messageOpt.isPresent()){
 			throw new NotFoundException("Messaggio non presente");
@@ -138,4 +138,5 @@ public class MessageServiceImpl implements MessageService {
 			return outgoingMessage;
 		}).collect(Collectors.toList());
 	}
+
 }

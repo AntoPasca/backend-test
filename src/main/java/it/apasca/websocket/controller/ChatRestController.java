@@ -6,7 +6,9 @@ package it.apasca.websocket.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,4 +64,11 @@ public class ChatRestController {
     	IncomingMessage incomingMessage = objectMapper.readValue(params, IncomingMessage.class);
         return messageService.load(incomingMessage.getUserID(), incomingMessage.getRoomID());
     }
+    
+    @ApiOperation("cancella messaggio selezionato")
+    @DeleteMapping("/messaggio/{id}")
+    public String deleteMessage(@PathVariable() String id) throws Exception {
+    	return messageService.delete(id);
+    }
+    
 }

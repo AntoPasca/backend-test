@@ -13,6 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OutgoingMessage {
+	private String id;
 	private MessageType type;
     private String content;
     private String senderUsername;

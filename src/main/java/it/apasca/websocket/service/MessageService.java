@@ -20,6 +20,6 @@ public interface MessageService {
 	 */
 	public String save(ChatMessage chatMessage);
 	public void notify(ChatMessage chatMessage) throws Exception;
-	public String deleteMessage(String messageId) throws Exception;
 	public List<OutgoingMessage> load(String userID, String roomID) throws Exception;
+	public String delete(String id) throws Exception;
 }
