@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Example;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -26,6 +26,7 @@ import it.apasca.websocket.dao.RoomDao;
 import it.apasca.websocket.dao.UserDao;
 import it.apasca.websocket.dto.Data;
 import it.apasca.websocket.dto.FirebaseNotification;
+import it.apasca.websocket.dto.LinkPage;
 import it.apasca.websocket.dto.OutgoingMessage;
 import it.apasca.websocket.model.ChatMessage;
 import it.apasca.websocket.model.ChatMessage.MessageType;
@@ -53,10 +54,15 @@ public class ChatServiceImpl implements ChatService {
 	@Autowired
     private SimpMessageSendingOperations messagingTemplate;
 	
+	@Autowired
+	RestTemplate restTemplate;
+	
 	@Value("${firebase.server.key}")
 	private String serverKey;
 	@Value("${firebase.api.url}")
 	private String apiUrl;
+	@Value("${linkpreview.api.url}")
+	private String linkPreviewUrl;
 	
 	
 	@Override
@@ -119,6 +125,18 @@ public class ChatServiceImpl implements ChatService {
 		
 		// invia messaggio
 		outgoingMessage.setContent(incomingMessage.getContent());
+		if(incomingMessage.getContent().startsWith("www") || incomingMessage.getContent().startsWith("http")) {
+			LinkPage linkPage = new LinkPage();
+			try {
+				linkPage = restTemplate.getForObject(linkPreviewUrl.concat(incomingMessage.getContent()), LinkPage.class);
+				if(linkPage != null) {
+					outgoingMessage.setLinkPage(linkPage);
+				}
+			}
+			catch (Exception e) {
+				log.error("Errore recupero informazioni pagina", e);
+			}
+		}
 		outgoingMessage.setRoomTitle(roomOpt.get().getTitle());
 		outgoingMessage.setSenderUsername(userOpt.get().getUsername());
 		outgoingMessage.setSendTime(new Date());

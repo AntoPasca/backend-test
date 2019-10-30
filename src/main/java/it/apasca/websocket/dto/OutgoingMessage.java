@@ -19,4 +19,5 @@ public class OutgoingMessage {
     private String senderUsername;
     private String roomTitle;
     private Date sendTime;
+    private LinkPage linkPage;
 }
